@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: goserver-service
+spec:
+  selector:
+    app: goserver
+  #type: ClusterIP -> Gera um ip interno para comunicação entre redes do kubernets
+  #type: NodePort -> Modo arcaico quase nunca usado
+  #type: LoadBalancer -> Mais utilizado nas cloud
+  ports:
+    - name: goserver-service
+      port: 80 # Porta do Service
+      targetPort: 3333 # Porta do Container
+      protocol: TCP
+      #nodePort: 30001 # 30.000 32.767
