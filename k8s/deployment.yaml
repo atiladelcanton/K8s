@@ -16,8 +16,16 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: "atilarampazo/hello-go:v5.4"
-        
+        image: "atilarampazo/hello-go:v5.5"
+        resources:
+          # Recurso minimo para a aplicação executar
+          requests:
+            cpu: "0.05"
+            memory: "20Mi"
+          # Maximo de recurso que o pod pode usar 
+          limits:
+            cpu: "0.05" #Tomar cuidado para o total de cpu de todos os pods não ultrapassem o total do vcpu
+            memory: "25Mi"
         # Esse cara verifica ate estar pronto para liberar o readiness e o liveness
         startupProbe:
           httpGet:
