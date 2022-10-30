@@ -16,13 +16,40 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: "atilarampazo/hello-go:v5.1"
+        image: "atilarampazo/hello-go:v5.4"
+        
+        # Esse cara verifica ate estar pronto para liberar o readiness e o liveness
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 3333  # Porta do Container
+          periodSeconds: 3 # Verifica a cada 5 segundos
+          failureThreshold: 10 # Numero de falhas para nao enviar requisicao
+
+        # Cuidado com o tempo quando trabalha com esses 2 caras
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3333  # Porta do Container
+          periodSeconds: 3 # Verifica a cada 5 segundos
+          failureThreshold: 1 # Numero de falhas para nao enviar requisicao
+          #initialDelaySeconds: 10
+
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3333  # Porta do Container
+          periodSeconds: 5 # Verifica a cada 5 segundos
+          failureThreshold: 1 # Numero de falhas para reiniciar o pod
+          timeoutSeconds: 1 # Tempo que deve aguardar resposta se passar disso conta como falha
+          successThreshold: 1 # Total de consultas com sucesso para o kubernets saber que está tudo ok
+          #initialDelaySeconds: 20
         envFrom:
           - configMapRef:
               name: goserver-env
           - secretRef:
               name: goserver-secret
-
+        
         # Montando o volume declarado
         volumeMounts:
           - mountPath: "/go/myfamily"
