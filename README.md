@@ -13,7 +13,7 @@
 
 - kubectl rollout  undo <Volta para ultima versão> <tipoObjecto: ex => Deployment > goserve --to-revision=<numero revision>
 - kubectl port-forward <tipo do servico> portalocal:portakluster
-
-
+- kubectl exec -it nome_pod -- <recurso que quer usar ex: bash>
+- kubectl logs <nome pod>
 ## Service
  -  serve como um "api gateway" para direcionar a requisicao para um pod especifico# K8s

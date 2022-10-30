@@ -1,0 +1,16 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - kms:
+          name : myKmsPlugin
+          endpoint: unix:///tmp/socketfile.sock
+          cachesize: 100
+      - aescbc:
+          keys:
+            - name: USER
+              secret: "YXRpbGEK"
+            - name: PASSWORD
+              secret: "MTIzNDU2Cg=="

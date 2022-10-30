@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: goserver
-  replicas: 10
+  replicas: 1
   template:
     metadata:
       labels:
@@ -16,4 +16,35 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: "atilarampazo/hello-go:v2"
+        image: "atilarampazo/hello-go:v5.1"
+        envFrom:
+          - configMapRef:
+              name: goserver-env
+          - secretRef:
+              name: goserver-secret
+
+        # Montando o volume declarado
+        volumeMounts:
+          - mountPath: "/go/myfamily"
+            name: config
+            readOnly: true # Ninguem consegue modificar
+
+      # Declaração do Volume         
+      volumes:
+        - name: config
+          configMap:
+            name: configmap-family
+            items:
+            - key: members
+              path: "family.txt"
+        # env:
+        #   - name: NAME
+        #     valueFrom:
+        #       configMapKeyRef:
+        #         name: goserver-env
+        #         key: NAME
+        #   - name: AGE
+        #     valueFrom:
+        #       configMapKeyRef:
+        #         name: goserver-env
+        #         key: AGE
