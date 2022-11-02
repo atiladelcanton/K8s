@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: goserver
   labels:
@@ -63,9 +64,14 @@ spec:
           - mountPath: "/go/myfamily"
             name: config
             readOnly: true # Ninguem consegue modificar
+          - mountPath: "/go/pvc"
+            name: goserver-volume
 
       # Declaração do Volume         
       volumes:
+        - name: goserver-volume
+          persistentVolumeClaim:
+            claimName: goserver-pvc
         - name: config
           configMap:
             name: configmap-family
